@@ -30,6 +30,8 @@ signals:
 public slots:
 
 private:
+    QVector<Service *> *getService();
+
     QVector<Server *> hosts_;
 
 };

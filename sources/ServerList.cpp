@@ -87,6 +87,7 @@ retErr 	ServerList::AddServer(const QString & host_name, unsigned short port, co
     s->ip = host_name;
     s->port = port;
     s->color = QColor("black"); // »«ћ≈Ќ»“№!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!<<<<<<<<<<<<
+    s->servs = getService();
     hosts_.push_back(s);
     return 	0;
 }
@@ -96,6 +97,54 @@ retErr 	ServerList::AddServer(const QString & host_name, unsigned short port, co
 const char * ServerList::GetElementName(void) const
 {
     return  "Servers";
+}
+
+QVector<Service *> *ServerList::getService()
+{
+    QVector<Service *> *ret = new  QVector<Service *>;
+
+    Service *serv1 = new Service();
+    serv1->name = "Service 1";
+//    serv1.servs = NULL; //«десь должна быть рекурси€.
+    ret->push_front(serv1);
+
+    Service *serv2 = new Service();
+    serv2->name = "Service 2";
+    QVector<Service*> *s2 = new QVector<Service*>;
+
+    Service *serv21 = new Service();
+    serv21->name = "Service 2.1";
+
+    Service *serv22 = new Service();
+    serv22->name = "Service 2.2";
+    Service *serv221 = new Service();
+    serv221->name = "Service 2.2.1";
+    QVector<Service*> *s22 = new QVector<Service*>;
+    s22->push_front(serv221);
+
+    serv22->servs = s22;
+
+    Service *serv23 = new Service();
+    serv23->name = "Service 2.3";
+
+
+
+
+
+
+    s2->push_front(serv21);
+    s2->push_front(serv22);
+    s2->push_front(serv23);
+
+    serv2->servs = s2;
+    ret->push_front(serv2);
+
+    Service *serv3 = new Service();
+    serv3->name = "Service 3";
+//    serv1.servs = NULL; //«десь должна быть рекурси€.
+    ret->push_front(serv3);
+
+    return ret;
 }
 
 //====== —охранение в XML структуру.

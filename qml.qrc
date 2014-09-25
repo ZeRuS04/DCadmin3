@@ -5,5 +5,7 @@
         <file>qml/Logs.qml</file>
         <file>qml/main.qml</file>
         <file>qml/Tree.qml</file>
+        <file>qml/Btn.qml</file>
+        <file>qml/ScrollBar.qml</file>
     </qresource>
 </RCC>

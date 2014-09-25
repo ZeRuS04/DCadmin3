@@ -21,6 +21,7 @@
 #define	  VER_RELEASE	"0"
 #define	  VER_GLOBAL	"1"
 
+
 //======
 #ifdef _DEBUG
 #define	  APP_VERSION(x) ("v" VER_RELEASE "." VER_GLOBAL "." x " (debug)")
@@ -35,11 +36,23 @@
 #define	  XML_GROUP_LIST		"GroupList"
 
 //======
+typedef unsigned long  time_utf;	// Абсолютное время в секундах (от 00:00:00 UTC, 01.01.1970).
+typedef unsigned long  time_sec;	// Время в секундах.
+typedef unsigned char  time_qs;		// Время в 1/4 долях секунды.
+typedef unsigned long  time_ms;		// Время в миллисекундах до 65.5 секунд.
+
+//======
 extern  const char  * start_string;
 extern  const char  * version_info;
 extern  const char  * config_file_name;
 extern  const char  * app_name;
 extern  unsigned long start_time;
+
+//======
+inline 	time_ms  TDelta(time_ms a, time_ms  b)	{if (a <= b) return 0L; else return	(a-b);}
+//inline 	time_ms  TDelta(time_qs a, time_qs  b)	{if (a <= b) return 0L; else return	ToMS(a-b);}
+//inline 	time_ms  TDelta(time_ms a, time_qs  b)	{return  TDelta(a, ToMS(b));}
+//inline 	time_ms  TDelta(time_qs a, time_ms  b)	{return  TDelta(ToMS(a), b);}
 
 //======
 unsigned long GetMyIP(const char * dev=0L);
@@ -48,7 +61,7 @@ unsigned long GetMyIP(const char * dev=0L);
 const char *  TextMyIP(const char * dev=0L);
 
 //====== Получение времени от старта программы миллисекунда
-//time_ms 	  Xtime(bool reset=false);
+time_ms 	  Xtime(bool reset=false);
 
 //====== Получение абсолютного времени  по часам сервера.
 unsigned long GetUTFtime(void);

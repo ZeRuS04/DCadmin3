@@ -5,6 +5,7 @@
 #include <QVector>
 #include "Common.h"
 #include "ServerList.h"
+//#include "Sessions.h"
 
 
 class AdminBackend : public QObject
@@ -38,8 +39,10 @@ private:
     Settings cfg_;
     ServerList servers_;
 
+//    Sessions sessions_;
 
-    QVector<Service *> getService();
+
+//    QVector<Service *> getService();
 //    QString getTreeBranch(QVector<Server> *serv) const;
 
     QString getTreeBranch(QVector<Service *> *serv);

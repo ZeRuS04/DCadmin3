@@ -53,27 +53,10 @@ void AdminBackend::addServer(const QString &name, const QString &ip, const QStri
 
 
 
-QVector<Service *> AdminBackend::getService()
-{
-    QVector<Service *> ret;
+//QVector<Service *> AdminBackend::getService()
+//{
 
-    Service *serv1 = new Service();
-    serv1->name = "Service 1";
-//    serv1.servs = NULL; //Здесь должна быть рекурсия.
-    ret.push_front(serv1);
-
-    Service *serv2 = new Service();
-    serv2->name = "Service 2";
-//    serv1.servs = NULL; //Здесь должна быть рекурсия.
-    ret.push_front(serv2);
-
-    Service *serv3 = new Service();
-    serv3->name = "Service 3";
-//    serv1.servs = NULL; //Здесь должна быть рекурсия.
-    ret.push_front(serv2);
-
-    return ret;
-}
+//}
 
 QString AdminBackend::getTreeBranch(QVector<Service *> *serv)
 {
