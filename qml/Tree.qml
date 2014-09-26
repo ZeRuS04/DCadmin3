@@ -27,7 +27,11 @@ Rectangle{
 
         Flickable {
             id:flickable
-            anchors.fill: parent
+//            anchors.fill: parent
+            anchors.top: parent.top;
+            anchors.left: parent.left;
+            anchors.right: scrollBarV.left;
+            anchors.bottom: scrollBarH.top;
             contentHeight: content.item.height;
             contentWidth: content.width;
         /*contentItem:*/ Loader {
@@ -37,17 +41,6 @@ Rectangle{
             sourceComponent: treeBranch
             property var elements: model
 
-            //        Column {
-            //            anchors.fill: parent
-            //            Repeater {
-            //                model: 1 + Math.max(view.contentItem.height, view.height) / rowHeight
-            //                Rectangle {
-            //                    objectName: "Faen"
-            //                    color: "white"
-            //                    width: view.width ; height: rowHeight
-            //                }
-            //            }
-            //        }
             Component {
                 id: treeBranch
                 Item {
@@ -133,15 +126,16 @@ Rectangle{
     }
     ScrollBar {
       id: scrollBarV
-      anchors.right: flickable.right; y: flickable.y
-      width: 8; height: flickable.height
+      anchors.right: parent.right; y: flickable.y
+      width: 8; height: flickable.height-8
       orientation: true;
       flickableArea: flickable
+
     }
     ScrollBar {
       id: scrollBarH
-      anchors.bottom: flickable.bottom; x: flickable.x
-      width: flickable.width; height: 8
+      anchors.bottom: parent.bottom; x: flickable.x
+      width: flickable.width-8; height: 8
       orientation: false;
       flickableArea: flickable
     }

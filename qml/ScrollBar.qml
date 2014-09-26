@@ -7,6 +7,12 @@ Rectangle { // background
 
     property bool orientation: true; // true=Vertical, false=Horizontal
     property var flickableArea
+    property double cof: {
+        if(container.orientation)
+            (height - indicator.height)/(flickableArea.contentHeight - flickableArea.height);
+        else
+            (width - indicator.width)/(flickableArea.contentWidth - flickableArea.width);
+    }
 
     visible:{
         if(orientation)
@@ -18,16 +24,16 @@ Rectangle { // background
 
     Rectangle {
         id: indicator// viewport indicator
-        y: flickableArea.visibleArea.yPosition * container.height
-        x: flickableArea.visibleArea.xPosition * container.width
+        y: container.orientation ? flickableArea.visibleArea.yPosition * container.height : 0
+        x: container.orientation ? 0 : flickableArea.visibleArea.xPosition * container.width
         width: {
-            if(orientation)
+            if(container.orientation)
                 parent.width;
             else
                 flickableArea.visibleArea.widthRatio * container.width;
         }
         height: {
-            if(orientation)
+            if(container.orientation)
                 flickableArea.visibleArea.heightRatio * container.height;
             else
                 parent.height;
@@ -40,11 +46,25 @@ Rectangle { // background
             drag.minimumY: 0;
             drag.target: indicator;
             drag.axis: container.orientation ? Drag.YAxis : Drag.XAxis;
-            drag.maximumX: container.width - indicator.width;
-            drag.maximumY: container.height - indicator.height;
+            drag.maximumX: {
+                if(!container.orientation)
+                    container.width - indicator.width;
+                else
+                    0;
+            }
+            drag.maximumY: {
+                if(container.orientation)
+                    container.height - indicator.height;
+                else
+                    0;
+            }
+            onPositionChanged: {
+                if(container.orientation)
+                    flickableArea.contentY = indicator.y/container.cof;
+                else
+                    flickableArea.contentX = indicator.x/container.cof;
+            }
         }
-        onXChanged: flickableArea.x = x;!!!!!!!!!!!!!!!!
-        onYChanged: flickableArea.y = y;!!!!!!!!!!!
 
     }
 }
