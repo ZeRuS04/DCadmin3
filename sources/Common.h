@@ -40,6 +40,9 @@ typedef unsigned long  time_utf;	// Абсолютное время в секундах (от 00:00:00 UTC
 typedef unsigned long  time_sec;	// Время в секундах.
 typedef unsigned char  time_qs;		// Время в 1/4 долях секунды.
 typedef unsigned long  time_ms;		// Время в миллисекундах до 65.5 секунд.
+//======
+
+typedef int SID;
 
 //======
 extern  const char  * start_string;
@@ -83,16 +86,16 @@ char * 	CopyString(const char * src, const char * dst=0L);
 
 //======
 char * xstrcpy(char * dst, const char * src);
-char * xstrnum(char * dst, unsigned short num);
+char * xstrnum(char * dst, ushort num);
 char * xstrnum(char * dst, unsigned long num);
 int    xstrcmp(const char * str1, const char * str2);
 //#define xstrendl(str)	{*str++=0x0d; *str++=0x0a;}
 
 //======
-unsigned short 	SymToByte(unsigned short sym);
+ushort 	SymToByte(ushort sym);
 
 //====== Перевод байта в два текстовых символа HEX представления.
-unsigned short ByteToSym(unsigned char byte);
+ushort ByteToSym(unsigned char byte);
 
 //======
 int 	ValidateHostName(const QString str);
@@ -100,11 +103,11 @@ int 	ValidateHostName(const QString str);
 //int 	GetPortFromAddr(const char * str, int * ps=0L);
 
 //======
-int 	CalcPortsFromStr(const char * str, unsigned short * pmin, unsigned short * pmax);
+int 	CalcPortsFromStr(const char * str, ushort * pmin, ushort * pmax);
 int 	CalcRangeUIDfromStr(const char * str, unsigned long * pmin, unsigned long * pmax);
 
 //======
-unsigned short 	UsageCPU(void);
+ushort 	UsageCPU(void);
 unsigned long 	GetAvailPhysMem(void);
 
 //======

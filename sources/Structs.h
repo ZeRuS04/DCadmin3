@@ -2,19 +2,22 @@
 #define SERVER_H
 
 #include <QString>
+#include "Common.h"
 #include <QColor>
 #include <QVector>
 
 struct Service{
+    int sid;    // Servce ID, определяющий тип сервиса
     QString name;
-    // возможно здесь будет еще тип сервиса
+
     QVector<Service*> *servs;
 };
 
 struct Server{
+    int sid;        // Server ID, определяющий тип сервера
     QString name;
     QString ip;
-    unsigned short port;
+    ushort port;
     QColor color;
     QVector<Service*> *servs;
     //Другие параметры
@@ -23,7 +26,7 @@ struct Server{
 struct Settings{
     QString lang;
     QString cdTbl;
-    unsigned short dbglvl;
+    ushort dbglvl;
     bool dlask;
     bool inferrsrv;
 };

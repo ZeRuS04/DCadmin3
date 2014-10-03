@@ -21,10 +21,11 @@ QString AdminBackend::getTree()
     else{
         QString s = "elements: [";
         for(uint i = 0; i < servers_.size(); i++){
-            QString str = "ListElement\n {\ntext:\"%1\";\ncolor:%3;\n%2\n},";
+            QString str = "ListElement\n {\nproperty int sid:%4\ntext:\"%1\";\ncolor:%3;\n%2\n},";
             Server * serv = servers_.GetServer(i);
             QString temp = getTreeBranch(serv->servs);
-            str = str.arg(servers_.GetServer(i)->name).arg(temp).arg(colorToString(servers_.GetServer(i)->color));
+
+            str = str.arg(serv->name).arg(temp).arg(colorToString(serv->color)).arg(serv->sid);
             s.append(str);
         }
         s = s.replace(s.size()-1, 1, "]");
@@ -33,6 +34,47 @@ QString AdminBackend::getTree()
     }
 
 }
+
+void AdminBackend::saveBranchState(int id, bool expanded)
+{
+    QMap<int, bool>::iterator i = treeState_.find(id);
+    if(i != treeState_.end() ) {
+        i.value() = expanded;
+        ++i;
+    }
+    else
+        treeState_.insert(id,expanded);
+}
+
+bool AdminBackend::getBranchState(int id)
+{
+    return treeState_.value(id, false);
+}
+
+QString AdminBackend::itemClicked(const QString &name)
+{
+    return name+" clicked.";
+}
+
+QString AdminBackend::itemDoubleClicked(const QString &name)
+{
+    return name+" double clicked.";
+}
+
+ushort AdminBackend::validateHostParam(const QString &name, const QString &ip, ushort port)
+{
+    ushort ret = 0;
+    if(name.isEmpty())
+        ret |= 1;
+    if((ip == "000.000.000.000") || (ip == "255.255.255.255"))
+        ret |= 2;
+    if(!ip.contains(QRegExp("^(([01]?[0-9]?[0-9]|2([0-4][0-9]|5[0-5]))\\.){3}([01]?[0-9]?[0-9]|2([0-4][0-9]|5[0-5]))$")))
+        ret |= 2;
+    if(port <= 1024)
+        ret |= 4;
+    return ret;
+}
+
 
 void AdminBackend::addServer(const QString &name, const QString &ip, const QString &port, QColor color)
 {
@@ -48,7 +90,12 @@ void AdminBackend::addServer(const QString &name, const QString &ip, const QStri
 //    QVector<Service *> *servces = new QVector<Service *>(getService());
 //    serv->servs = servces;
 
-    servers_.AddServer(ip, port.toInt(), name);
+    servers_.AddServer(ip, port.toInt(), name, color);
+}
+
+void AdminBackend::removeServer(int &id)
+{
+    servers_.DelServer(id);
 }
 
 
@@ -63,8 +110,8 @@ QString AdminBackend::getTreeBranch(QVector<Service *> *serv)
     if(serv){
         QString retStr = "elements:[";
         for(int i = 0; i < serv->size(); i++){
-            QString str = "ListElement\n {\ntext:\"%1\";\n%2\n},";
-            str = str.arg(serv->at(i)->name).arg(getTreeBranch(serv->at(i)->servs));
+            QString str = "ListElement\n {\nproperty int sid:%3\ntext:\"%1\";\n%2\n},";
+            str = str.arg(serv->at(i)->name).arg(getTreeBranch(serv->at(i)->servs)).arg(serv->at(i)->sid);
             retStr.append(str);
         }
 

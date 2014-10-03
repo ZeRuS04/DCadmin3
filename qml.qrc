@@ -7,5 +7,9 @@
         <file>qml/Tree.qml</file>
         <file>qml/Btn.qml</file>
         <file>qml/ScrollBar.qml</file>
+        <file>qml/Settings.qml</file>
+        <file>qml/ContextMenu.qml</file>
+        <file>qml/ContextButton.qml</file>
+        <file>qml/ServerInfo.qml</file>
     </qresource>
 </RCC>

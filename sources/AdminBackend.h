@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QVector>
+#include <QMap>
 #include "Common.h"
 #include "ServerList.h"
 //#include "Sessions.h"
@@ -18,11 +19,21 @@ public:
     explicit AdminBackend(QObject *parent = 0);
     Q_INVOKABLE QString getTree();
 
+    Q_INVOKABLE void saveBranchState(int id, bool expanded);
+    Q_INVOKABLE bool getBranchState(int id);
+
+    //=====¬озможно стоит методы эти переделать под sid:
+    Q_INVOKABLE QString itemClicked(const QString &name);
+    Q_INVOKABLE QString itemDoubleClicked(const QString &name);
+    //=====end
+
+    Q_INVOKABLE ushort validateHostParam(const QString &name,const QString &ip, ushort port);
+
     Settings cfg() const{     return cfg_;    }
     void setCfg(const Settings &cfg){
         cfg_ = cfg;
     }
-    void setCfg(const QString &lang, const QString &cdTbl, unsigned short dbglvl, bool dlask, bool inferrsrv ){
+    void setCfg(const QString &lang, const QString &cdTbl, ushort dbglvl, bool dlask, bool inferrsrv ){
         cfg_.lang = lang;
         cfg_.cdTbl = cdTbl;
         cfg_.dbglvl = dbglvl;
@@ -34,10 +45,12 @@ signals:
 
 public slots:
     void addServer(const QString &name, const QString &ip, const QString &port, QColor color);
+    void removeServer(int &id);
 
 private:
     Settings cfg_;
     ServerList servers_;
+    QMap<int, bool> treeState_;
 
 //    Sessions sessions_;
 

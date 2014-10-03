@@ -7,16 +7,38 @@ Rectangle{
     height: column.height;
     color: "white"
     property var model;
-    function changeModel()
-    {
+    function changeModel(){
         var str;
         str = admin.getTree();
         model = Qt.createQmlObject(str, addServ);
     }
+
+    function validateHostParam(name, ip, port){
+        // Проверяем параметры хоста введенные пользователем.
+        // Если проблема в имени возвращаем 1
+        // Если проблема в ip адресе взвращаем 2
+        // Если проблема в порте возвращаем 4
+        // Проблема во всем 7, проблем нет - 0
+        // Порт и адрес 6, имя и порт 5, имя и адрес - 3
+        var retErr = 0;
+        if(port >= 65535)
+            retErr |= 4;
+        retErr |= admin.validateHostParam(name, ip, port);
+        return retErr;
+    }
+
     Column{
         id: column;
         spacing: 3;
         anchors.verticalCenter: parent.verticalCenter
+        Label{
+            id: errLabel
+            width: name.width;
+            height: 30;
+            text: "";
+            color: "darkred"
+            visible: false
+        }
 
         TextField{
             id: name;
@@ -34,7 +56,7 @@ Rectangle{
                 verticalAlignment: TextInput.AlignVCenter;
 
                 validator: RegExpValidator{regExp: /^(([01]?[0-9]?[0-9]|2([0-4][0-9]|5[0-5]))\.){3}([01]?[0-9]?[0-9]|2([0-4][0-9]|5[0-5]))$/}
-                inputMask: "000.000.000.000;0";
+//                inputMask: "000.000.000.000;0";
                 placeholderText: "IP";
 
             }
@@ -97,10 +119,26 @@ Rectangle{
                 MouseArea{
                     anchors.fill: parent
                     onClicked: {
-                        //Проверка на корректность должна быть здесь.
-                        admin.addServer(name.text, ip.text, port.text, color.curColor);
-                        addServ.changeModel();
-                        addServ.visible = false;
+                        errLabel.visible = true;
+                        var errors = addServ.validateHostParam(name.text, ip.text, port.text);
+                        if(!errors)
+                        {
+                            errLabel.visible = false;
+                            admin.addServer(name.text, ip.text, port.text, color.curColor);
+                            addServ.changeModel();
+                            addServ.visible = false;
+                        }
+                        else
+                        {
+                            errLabel.text = qsTr("Check these fields: ")
+                            errLabel.visible = true;
+                            if(errors & 1)
+                                errLabel.text += "Name, "
+                            if(errors & 2)
+                                errLabel.text += "IP, "
+                            if(errors & 4)
+                                errLabel.text += "Port"
+                        }
                     }
                 }
             }
@@ -113,11 +151,11 @@ Rectangle{
                 MouseArea{
                     anchors.fill: parent
                     onClicked: {
+                        errLabel.visible = false;
                         addServ.visible = false;
                     }
                 }
             }
-
         }
     }
 

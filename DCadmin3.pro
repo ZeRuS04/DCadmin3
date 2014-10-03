@@ -1,6 +1,6 @@
 TEMPLATE = app
 
-QT += qml quick widgets network
+QT += qml quick widgets network xml
 
 SOURCES +=    sources/AdminBackend.cpp \
     sources/main.cpp \
